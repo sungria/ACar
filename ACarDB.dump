@@ -1,0 +1,625 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.6.8
+-- Dumped by pg_dump version 9.6.8
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: brand; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.brand (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.brand OWNER TO postgres;
+
+--
+-- Name: brand_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.brand_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.brand_id_seq OWNER TO postgres;
+
+--
+-- Name: brand_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.brand_id_seq OWNED BY public.brand.id;
+
+
+--
+-- Name: engine; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.engine (
+    id integer NOT NULL,
+    vehicle_id integer NOT NULL,
+    capacity real NOT NULL,
+    numberofcylinders integer NOT NULL,
+    power integer
+);
+
+
+ALTER TABLE public.engine OWNER TO postgres;
+
+--
+-- Name: engine_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.engine_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.engine_id_seq OWNER TO postgres;
+
+--
+-- Name: engine_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.engine_id_seq OWNED BY public.engine.id;
+
+
+--
+-- Name: model_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.model_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.model_id_seq OWNER TO postgres;
+
+--
+-- Name: model; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.model (
+    brand_id integer NOT NULL,
+    id integer DEFAULT nextval('public.model_id_seq'::regclass) NOT NULL,
+    name character varying(255) NOT NULL,
+    year date
+);
+
+
+ALTER TABLE public.model OWNER TO postgres;
+
+--
+-- Name: owner; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.owner (
+    id integer NOT NULL,
+    name character varying(255)
+);
+
+
+ALTER TABLE public.owner OWNER TO postgres;
+
+--
+-- Name: owner_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.owner_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.owner_id_seq OWNER TO postgres;
+
+--
+-- Name: owner_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.owner_id_seq OWNED BY public.owner.id;
+
+
+--
+-- Name: registration; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.registration (
+    vehicleid integer NOT NULL,
+    ownerid integer NOT NULL,
+    registrationnum character varying(10),
+    "From" timestamp without time zone NOT NULL,
+    "To" timestamp without time zone
+);
+
+
+ALTER TABLE public.registration OWNER TO postgres;
+
+--
+-- Name: tire_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.tire_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tire_id_seq OWNER TO postgres;
+
+--
+-- Name: tire; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tire (
+    vehicle_id integer NOT NULL,
+    wheel_id integer NOT NULL,
+    id integer DEFAULT nextval('public.tire_id_seq'::regclass) NOT NULL,
+    width real NOT NULL,
+    airpressure real NOT NULL,
+    type character varying(255)
+);
+
+
+ALTER TABLE public.tire OWNER TO postgres;
+
+--
+-- Name: type; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.type (
+    id character varying(5) NOT NULL
+);
+
+
+ALTER TABLE public.type OWNER TO postgres;
+
+--
+-- Name: vehicle; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.vehicle (
+    brand_id integer NOT NULL,
+    model_id integer NOT NULL,
+    id integer NOT NULL,
+    type character varying(5) NOT NULL,
+    towingid integer,
+    doors integer,
+    length integer,
+    width integer,
+    height integer,
+    "Load" integer,
+    licence character varying(255)
+);
+
+
+ALTER TABLE public.vehicle OWNER TO postgres;
+
+--
+-- Name: vehicle_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.vehicle_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.vehicle_id_seq OWNER TO postgres;
+
+--
+-- Name: vehicle_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.vehicle_id_seq OWNED BY public.vehicle.id;
+
+
+--
+-- Name: wheel_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.wheel_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.wheel_id_seq OWNER TO postgres;
+
+--
+-- Name: wheel; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.wheel (
+    vehicle_id integer NOT NULL,
+    id integer DEFAULT nextval('public.wheel_id_seq'::regclass) NOT NULL,
+    susspringrate real,
+    braketype character varying(255),
+    wheeldiameter real NOT NULL
+);
+
+
+ALTER TABLE public.wheel OWNER TO postgres;
+
+--
+-- Name: brand id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brand ALTER COLUMN id SET DEFAULT nextval('public.brand_id_seq'::regclass);
+
+
+--
+-- Name: engine id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.engine ALTER COLUMN id SET DEFAULT nextval('public.engine_id_seq'::regclass);
+
+
+--
+-- Name: owner id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.owner ALTER COLUMN id SET DEFAULT nextval('public.owner_id_seq'::regclass);
+
+
+--
+-- Name: vehicle id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicle ALTER COLUMN id SET DEFAULT nextval('public.vehicle_id_seq'::regclass);
+
+
+--
+-- Data for Name: brand; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.brand (id, name) FROM stdin;
+1	BMW
+2	Suzuki
+3	GT
+4	eBike
+\.
+
+
+--
+-- Name: brand_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.brand_id_seq', 4, true);
+
+
+--
+-- Data for Name: engine; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.engine (id, vehicle_id, capacity, numberofcylinders, power) FROM stdin;
+1	5	1	4	85
+2	1	1.60000002	6	120
+\.
+
+
+--
+-- Name: engine_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.engine_id_seq', 2, true);
+
+
+--
+-- Data for Name: model; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.model (brand_id, id, name, year) FROM stdin;
+1	1	X5	2010-04-02
+2	2	Katana	2012-11-04
+2	3	Swift	2019-11-12
+3	4	Avalanche2	2007-05-15
+4	5	i1024	2020-06-11
+\.
+
+
+--
+-- Name: model_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.model_id_seq', 5, true);
+
+
+--
+-- Data for Name: owner; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.owner (id, name) FROM stdin;
+1	P3
+2	Sungria
+3	Panic_Monster
+6	Red
+7	Sungrai
+\.
+
+
+--
+-- Name: owner_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.owner_id_seq', 7, true);
+
+
+--
+-- Data for Name: registration; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.registration (vehicleid, ownerid, registrationnum, "From", "To") FROM stdin;
+5	2	111	2018-11-13 00:00:00	\N
+5	3	211	2008-11-13 00:00:00	2017-04-03 00:00:00
+1	1	333	2011-04-22 00:00:00	\N
+4	2	444	2021-02-22 13:42:39.717169	\N
+5	1	212	2021-02-23 20:59:07.752082	\N
+1	6	334	2021-02-26 22:45:07.728234	\N
+1	2	335	2021-02-26 22:51:07.268144	2021-02-26 23:00:54.098573
+\.
+
+
+--
+-- Data for Name: tire; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tire (vehicle_id, wheel_id, id, width, airpressure, type) FROM stdin;
+1	1	7	185	1.79999995	summer
+1	1	8	165	2	winter
+2	3	11	155	1.60000002	summer
+2	3	12	155	1.60000002	summer
+\.
+
+
+--
+-- Name: tire_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.tire_id_seq', 12, true);
+
+
+--
+-- Data for Name: type; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.type (id) FROM stdin;
+car
+bike
+ebike
+\.
+
+
+--
+-- Data for Name: vehicle; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.vehicle (brand_id, model_id, id, type, towingid, doors, length, width, height, "Load", licence) FROM stdin;
+1	1	1	car	\N	5	4536	2456	1404	100	AA123
+1	1	3	car	\N	\N	\N	\N	\N	\N	AV345
+1	1	4	car	\N	\N	\N	\N	\N	\N	VV404
+2	3	5	car	\N	\N	\N	\N	\N	\N	BR512
+\.
+
+
+--
+-- Name: vehicle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.vehicle_id_seq', 6, true);
+
+
+--
+-- Data for Name: wheel; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.wheel (vehicle_id, id, susspringrate, braketype, wheeldiameter) FROM stdin;
+1	1	3	break!	16
+3	2	2	bb8	18
+\.
+
+
+--
+-- Name: wheel_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.wheel_id_seq', 2, true);
+
+
+--
+-- Name: brand brand_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.brand
+    ADD CONSTRAINT brand_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: engine engine_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.engine
+    ADD CONSTRAINT engine_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: model model_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.model
+    ADD CONSTRAINT model_pkey PRIMARY KEY (brand_id, id);
+
+
+--
+-- Name: owner owner_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.owner
+    ADD CONSTRAINT owner_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: registration registration_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registration
+    ADD CONSTRAINT registration_pkey PRIMARY KEY (vehicleid, ownerid);
+
+
+--
+-- Name: tire tire_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tire
+    ADD CONSTRAINT tire_pkey PRIMARY KEY (vehicle_id, wheel_id, id);
+
+
+--
+-- Name: type type_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.type
+    ADD CONSTRAINT type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: vehicle vehicle_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicle
+    ADD CONSTRAINT vehicle_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wheel wheel_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wheel
+    ADD CONSTRAINT wheel_pkey PRIMARY KEY (vehicle_id, id);
+
+
+--
+-- Name: engine fkengine745933; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.engine
+    ADD CONSTRAINT fkengine745933 FOREIGN KEY (vehicle_id) REFERENCES public.vehicle(id);
+
+
+--
+-- Name: model fkmodel222384; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.model
+    ADD CONSTRAINT fkmodel222384 FOREIGN KEY (brand_id) REFERENCES public.brand(id);
+
+
+--
+-- Name: registration fkregistrati451518; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registration
+    ADD CONSTRAINT fkregistrati451518 FOREIGN KEY (ownerid) REFERENCES public.owner(id);
+
+
+--
+-- Name: registration fkregistrati568175; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.registration
+    ADD CONSTRAINT fkregistrati568175 FOREIGN KEY (vehicleid) REFERENCES public.vehicle(id);
+
+
+--
+-- Name: tire fktire303830; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tire
+    ADD CONSTRAINT fktire303830 FOREIGN KEY (wheel_id, vehicle_id) REFERENCES public.wheel(vehicle_id, id);
+
+
+--
+-- Name: vehicle fkvehicle363052; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicle
+    ADD CONSTRAINT fkvehicle363052 FOREIGN KEY (brand_id, model_id) REFERENCES public.model(brand_id, id);
+
+
+--
+-- Name: vehicle fkvehicle971254; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicle
+    ADD CONSTRAINT fkvehicle971254 FOREIGN KEY (type) REFERENCES public.type(id);
+
+
+--
+-- Name: wheel fkwheel882789; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.wheel
+    ADD CONSTRAINT fkwheel882789 FOREIGN KEY (vehicle_id) REFERENCES public.vehicle(id);
+
+
+--
+-- Name: vehicle towing; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.vehicle
+    ADD CONSTRAINT towing FOREIGN KEY (towingid) REFERENCES public.vehicle(id);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
