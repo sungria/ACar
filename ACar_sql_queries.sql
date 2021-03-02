@@ -94,6 +94,8 @@ SELECT --VALUES
 UPDATE vehicle
 SET licence ='BR512' WHERE id = 5;
 
+
+-- Registration starts here
 INSERT INTO registration(vehicleid, ownerid, registrationnum, "From")
 SELECT 
    v.id, o.id, 000333, '2011-04-22'
@@ -101,17 +103,20 @@ SELECT
    WHERE v.licence = 'BR512' AND o.name = 'P3';
  --COMMIT;
 
-UPDATE registration 
-SET vehicleid = '1'
-WHERE ownerid = '1'
+-- Not correct: UPDATE old one "To" and INSERT new one to keep the history.
+-- UPDATE registration 
+-- SET vehicleid = '1'
+-- WHERE ownerid = '1'
 
 INSERT INTO registration(vehicleid, ownerid, registrationnum, "From")
 SELECT 
    v.id, o.id, 444, now()
    FROM vehicle AS v , owner as o
    WHERE v.licence = 'VV404' AND o.name = 'Sungria';
- 
+-- here the license doesn't make sense... 
 
+
+-- TODO: ad all the columns like name and car info
  SELECT vehicleid, ownerid,
            registrationnum,
            "From",
@@ -119,7 +124,7 @@ SELECT
     FROM registration
     JOIN vehicle AS v ON vehicleid = v.id WHERE v.licence = 'BR512';
 
-
+-- ad all the columns like name and car info
 SELECT vehicleid, ownerid,
            registrationnum,
            "From",
@@ -128,10 +133,6 @@ SELECT vehicleid, ownerid,
     JOIN vehicle AS v ON vehicleid = v.id --WHERE v.licence = 'BR512' 
     JOIN owner AS o ON ownerid = o.id WHERE v.licence = 'BR512' AND o.name = 'Sungria';
 
-
-UPDATE registration 
-SET vehicleid = '1'
-WHERE ownerid = '1'
 
 INSERT INTO registration(vehicleid, ownerid, registrationnum, "From")
 SELECT 

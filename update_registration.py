@@ -20,11 +20,12 @@ import psycopg2
 try:
     connection = psycopg2.connect(
         host = "localhost",
-        database = "ACar",
+        database = "postgres",
         user = "postgres",
-        password = "")
+        password = "postgres")
 except psycopg2.Error as err:
     print("Connection to the database failed: ", err)
+    # exit()
 
 
 ### create a cursor
@@ -36,6 +37,12 @@ cursor = connection.cursor()
 
 ### get results: fetchall, fetchone, fetchmany
 # cursor.fetchone()
+
+###### Get the registration, owner and car info...
+
+
+
+
 
 ### get data to write
 name = input("Enter new owner's name: ")
